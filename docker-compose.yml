@@ -1,0 +1,9 @@
+services:
+  discordbot:
+    image: ghcr.io/osthelia/osthelia-discordbot:latest
+    container_name: osthelia-discordbot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
