@@ -37,24 +37,21 @@ function drawDecorativeMotif(ctx, x) {
 }
 
 function drawWelcomeText(ctx, member, x, maxWidth) {
-    /*withGlow(ctx, 'rgba(155, 92, 255, 0.8)', 10, () => {
+    withGlow(ctx, 'rgba(155, 92, 255, 0.8)', 10, () => {
         drawSparkle(ctx, x + 8, 78, 9, COLOR_ACCENT);
-    });*/
+    });
 
-    const nameSize = 100;
-    const name = truncateToWidth(ctx, "GC Stats – Editors   ", maxWidth - 26);
+    const nameFont = size => `600 ${size}px "${SERIF}"`;
+    const nameSize = fitFontSize(ctx, member.displayName, nameFont, maxWidth - 26, 44, 26);
+    const name = truncateToWidth(ctx, member.displayName, maxWidth - 26);
 
     withGlow(ctx, 'rgba(214, 184, 255, 0.5)', 14, () => {
         ctx.fillStyle = COLOR_TEXT;
-        ctx.font = `700 ${nameSize}px "${SERIF}"`;
-
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-
-        ctx.fillText(name, ctx.canvas.width / 2, ctx.canvas.height / 2);
+        ctx.font = nameFont(nameSize);
+        ctx.fillText(name, x + 26, 96);
     });
 
-    /*ctx.fillStyle = COLOR_SUBTEXT;
+    ctx.fillStyle = COLOR_SUBTEXT;
     ctx.font = '20px sans-serif';
     ctx.fillText(truncateToWidth(ctx, `Welcome to ${member.guild.name}`, maxWidth), x, 130);
 
@@ -62,7 +59,7 @@ function drawWelcomeText(ctx, member, x, maxWidth) {
     ctx.font = '600 22px sans-serif';
     ctx.letterSpacing = '0.5px';
     ctx.fillText('Welcome!', x, 200);
-    ctx.letterSpacing = '0px';*/
+    ctx.letterSpacing = '0px';
 }
 
 export default {
@@ -73,12 +70,12 @@ export default {
         drawCardBackground(ctx, PADDING + AVATAR_SIZE / 2, HEIGHT / 2);
 
         const avatarY = (HEIGHT - AVATAR_SIZE) / 2;
-        //await drawAvatar(ctx, member.displayAvatarURL({ extension: 'png', size: 256 }), PADDING, avatarY, AVATAR_SIZE);
+        await drawAvatar(ctx, member.displayAvatarURL({ extension: 'png', size: 256 }), PADDING, avatarY, AVATAR_SIZE);
 
         const textX = PADDING + AVATAR_SIZE + 45;
         const dividerX = 610;
         drawWelcomeText(ctx, member, textX, dividerX - textX - 20);
-        //drawDecorativeMotif(ctx, dividerX);
+        drawDecorativeMotif(ctx, dividerX);
 
         return new AttachmentBuilder(await canvas.encode('png'), { name: 'welcome.png' });
     }
