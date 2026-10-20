@@ -6,6 +6,7 @@
  * @package Osthelia
  */
 
+import './core/consoleTimestamp.js';
 import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -39,7 +40,19 @@ Osthelia.commands = new Map();
 
 await Osthelia.loader.loadEvents(client);
 
+client.on('error', err => {
+    console.error('Client error:', err.message);
+});
+
+client.on('shardError', err => {
+    console.error('Gateway connection error:', err.message);
+});
+
 process.on('uncaughtException', err => {
+    console.error(err);
+});
+
+process.on('unhandledRejection', err => {
     console.error(err);
 });
 
