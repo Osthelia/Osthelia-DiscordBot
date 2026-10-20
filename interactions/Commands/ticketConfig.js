@@ -250,6 +250,23 @@ export default {
                     .setName('role')
                     .setDescription('Role')
                     .setRequired(true))))
+        .addSubcommandGroup(group => group
+            .setName('max-open-bypass')
+            .setDescription('Manage the roles that ignore the open ticket limit')
+            .addSubcommand(sub => sub
+                .setName('add')
+                .setDescription('Let a role bypass the open ticket limit')
+                .addRoleOption(option => option
+                    .setName('role')
+                    .setDescription('Role')
+                    .setRequired(true)))
+            .addSubcommand(sub => sub
+                .setName('remove')
+                .setDescription('Stop a role from bypassing the open ticket limit')
+                .addRoleOption(option => option
+                    .setName('role')
+                    .setDescription('Role')
+                    .setRequired(true))))
         .addSubcommand(sub => sub
             .setName('transcript-channel')
             .setDescription('Set the channel closed ticket transcripts are sent to')
@@ -521,6 +538,21 @@ export default {
             Osthelia.database.update(guildId, { ticketAddableRoleIds });
             return interaction.reply({
                 content: sub === 'add' ? `${role} can now be added to tickets from the Add button.` : `${role} removed from the addable roles list.`,
+                flags: MessageFlags.Ephemeral
+            });
+        }
+
+        if (group === 'max-open-bypass' && (sub === 'add' || sub === 'remove')) {
+            const role = interaction.options.getRole('role');
+            const config = Osthelia.database.get(guildId);
+
+            const ticketMaxOpenBypassRoleIds = sub === 'add'
+                ? [...new Set([...config.ticketMaxOpenBypassRoleIds, role.id])]
+                : config.ticketMaxOpenBypassRoleIds.filter(roleId => roleId !== role.id);
+
+            Osthelia.database.update(guildId, { ticketMaxOpenBypassRoleIds });
+            return interaction.reply({
+                content: sub === 'add' ? `${role} now ignores the open ticket limit.` : `${role} no longer ignores the open ticket limit.`,
                 flags: MessageFlags.Ephemeral
             });
         }

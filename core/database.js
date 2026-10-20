@@ -22,6 +22,7 @@ const DEFAULT_CONFIG = {
     ticketClosedCategoryId: null,
     ticketDefaultBannerUrl: null,
     ticketMaxOpenPerMember: 1,
+    ticketMaxOpenBypassRoleIds: [],
     ticketAddableRoleIds: [],
     autoRoleId: null,
     autoMod: {

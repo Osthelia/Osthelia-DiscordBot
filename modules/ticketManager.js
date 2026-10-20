@@ -332,7 +332,8 @@ export default {
         const config = Osthelia.database.get(guild.id);
 
         const openTickets = Osthelia.ticketData.listOpenByMember(guild.id, opener.id);
-        if (openTickets.length >= config.ticketMaxOpenPerMember) {
+        const bypassesLimit = config.ticketMaxOpenBypassRoleIds.some(roleId => interaction.member.roles.cache.has(roleId));
+        if (!bypassesLimit && openTickets.length >= config.ticketMaxOpenPerMember) {
             const links = openTickets.map(ticket => `<#${ticket.channelId}>`).join(', ');
             return interaction.reply({ content: `You already have ${openTickets.length} open ticket(s) (limit ${config.ticketMaxOpenPerMember}): ${links}`, flags: MessageFlags.Ephemeral });
         }
