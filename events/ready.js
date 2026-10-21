@@ -8,11 +8,14 @@
  * @package Osthelia\Events
  */
 
+import heartbeat from '../core/heartbeat.js';
+
 export default {
     type: 'clientReady',
     once: true,
     async callback(client) {
         Osthelia.commands = await Osthelia.loader.loadInteractions();
+        heartbeat.start(client);
 
         console.log(`Connected as ${client.user.tag}`);
         console.log(`Loaded ${Osthelia.commands.size} interactions.`);
