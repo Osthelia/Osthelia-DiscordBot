@@ -13,6 +13,10 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends gosu \
     && rm -rf /var/lib/apt/lists/*
 
+# npm/npx/corepack are not needed at runtime; their bundled deps trigger CVEs
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+    /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN chmod +x docker-entrypoint.sh && mkdir -p /app/data && chown -R node:node /app
