@@ -1,6 +1,10 @@
 node_modules
 npm-debug.log*
 
+.cache
+.github
+tests
+
 .git
 .gitignore
 .idea
@@ -12,5 +16,3 @@ npm-debug.log*
 .env.example
 
 data
-SUIVI.md
-CLAUDE.md

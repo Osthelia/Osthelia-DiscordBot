@@ -17,9 +17,9 @@ RUN apt-get update \
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
     /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack
 
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN chmod +x docker-entrypoint.sh && mkdir -p /app/data && chown -R node:node /app
+COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+COPY --chown=node:node . .
+RUN chmod +x docker-entrypoint.sh && mkdir -p /app/data && chown node:node /app /app/data
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["node", "index.js"]
